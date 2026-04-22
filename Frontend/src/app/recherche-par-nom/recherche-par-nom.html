@@ -1,0 +1,47 @@
+<div class="container">
+  <form class="form-inline mt-2 mb-2">
+    <div class="form-group mx-sm-3">
+      <label for="searchTerm" class="mr-2">Nom téléphone :</label>
+      <input id="searchTerm" [(ngModel)]="searchTerm" (keyup)="onKeyUp(searchTerm)" name="searchTerm"
+        class="form-control" placeholder="Tapez un nom...">
+    </div>
+  </form>
+
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <table class="table table-striped" *ngIf="telephone.length > 0; else noData">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Statut</th>
+            <th>Prix</th>
+            <th>Date Création</th>
+            <th *ngIf="auth.isAdmin()">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tel of telephone; trackBy: trackById">
+            <td>{{ tel.idtel }}</td>
+            <td>{{ tel.nomTel }}</td>
+            <td>{{ tel.desTel }}</td>
+            <td>{{ tel.statut.nomSat }}</td>
+            <td>{{ tel.prixTel }} DT</td>
+            <td>{{ tel.dateCreation | date:'dd/MM/yyyy' }}</td>
+            <td *ngIf="auth.isAdmin()">
+              <button class="btn btn-danger me-2" (click)="supprimerTelephone(tel)">Supprimer</button>
+              <a class="btn btn-success" [routerLink]="['/updateTelephone', tel.idtel]">Modifier</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <ng-template #noData>
+        <div class="alert alert-warning text-center">
+          Aucun téléphone trouvé !
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

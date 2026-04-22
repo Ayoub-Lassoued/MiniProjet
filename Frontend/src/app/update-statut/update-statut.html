@@ -1,0 +1,17 @@
+<form>
+  <div [hidden]="ajout">
+    <label>ID Statut</label>
+    <input type="text" [readOnly]="true" [(ngModel)]="statut.idSat" name="idStatut" class="form-control w-25">
+  </div>
+
+  <div class="mt-2">
+    <label>Nom Statut</label>
+    <input type="text" [(ngModel)]="statut.nomSat" name="nomStatut" class="form-control"
+      placeholder="Entrez un nom de Statut...">
+  </div>
+
+  <div class="mt-2">
+    <button type="button" [disabled]="!statut.nomSat" class="btn btn-success"
+      (click)="saveStatut()">{{ ajout ? "Ajouter" : "Editer" }}</button>
+  </div>
+</form>

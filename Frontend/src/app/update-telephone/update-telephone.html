@@ -1,0 +1,67 @@
+<div class="container mt-4">
+  <h2>Modifier un Téléphone :</h2>
+
+  <!-- الفورم يظهر فقط بعد إنشاء FormGroup -->
+  <form *ngIf="myForm" [formGroup]="myForm" (ngSubmit)="updateTelephone()">
+
+
+
+
+
+    <div class="mb-3">
+      <label>Nom Téléphone</label>
+      <input type="text" class="form-control" formControlName="nomTel">
+      <div *ngIf="myForm.get('nomTel')?.invalid && myForm.get('nomTel')?.touched" class="text-danger">
+        ⚠️ Le nom est obligatoire.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label>Email Téléphone</label>
+      <input type="email" class="form-control" formControlName="emailtel">
+      <div *ngIf="myForm.get('emailtel')?.errors?.['required'] && myForm.get('emailtel')?.touched" class="text-danger">
+        ⚠️ L'email est obligatoire.
+      </div>
+      <div *ngIf="myForm.get('emailtel')?.errors?.['email'] && myForm.get('emailtel')?.touched" class="text-danger">
+        ⚠️ Format d'email invalide.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label>Description</label>
+      <textarea class="form-control" formControlName="desTEL"></textarea>
+      <div *ngIf="myForm.get('desTEL')?.invalid && myForm.get('desTEL')?.touched" class="text-danger">
+        ⚠️ La description est obligatoire.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label>Statut</label>
+      <select class="form-control" formControlName="statut">
+        <option *ngFor="let s of Status" [value]="s.idSat">{{ s.nomSat }}</option>
+      </select>
+      <div *ngIf="myForm.get('statut')?.invalid && myForm.get('statut')?.touched" class="text-danger">
+        ⚠️ Veuillez sélectionner un statut.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label>Prix Téléphone</label>
+      <input type="number" class="form-control" formControlName="prixTel">
+      <div *ngIf="myForm.get('prixTel')?.invalid && myForm.get('prixTel')?.touched" class="text-danger">
+        ⚠️ Le prix est obligatoire et doit être ≥ 0.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label>Date création</label>
+      <input type="date" class="form-control" formControlName="dateCreation">
+      <div *ngIf="myForm.get('dateCreation')?.invalid && myForm.get('dateCreation')?.touched" class="text-danger">
+        ⚠️ La date est obligatoire.
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-success" [disabled]="myForm.invalid">Modifier</button>
+
+  </form>
+</div>

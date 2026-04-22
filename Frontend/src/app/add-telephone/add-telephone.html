@@ -1,0 +1,48 @@
+<div class="container mt-4">
+  <h2>Ajouter un Nouveau Téléphone :</h2>
+
+  <form [formGroup]="myForm" (ngSubmit)="addTelephone()">
+
+    <div class="form-group">
+      <label>Nom Téléphone :</label>
+      <input type="text" class="form-control" formControlName="nomTel">
+    </div>
+    <span *ngIf="myForm.controls['nomTel'].invalid && myForm.controls['nomTel'].touched" class="text-danger">
+      ⚠️ Le nom est obligatoire et doit contenir au moins 6 caractères
+    </span>
+
+    <div class="form-group">
+      <label>Email Téléphone :</label>
+      <input type="email" class="form-control" formControlName="emailtel">
+    </div>
+    <span *ngIf="myForm.controls['emailtel'].invalid && myForm.controls['emailtel'].touched" class="text-danger">
+      ⚠️ Email invalide
+    </span>
+
+    <div class="form-group">
+      <label>Description :</label>
+      <textarea class="form-control" formControlName="desTEL"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Statut :</label>
+      <select class="form-control" formControlName="statut">
+        <option value="">-- Sélectionner --</option>
+        <option *ngFor="let s of Statuts" [value]="s.idSat">{{ s.nomSat }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Prix Téléphone :</label>
+      <input type="number" class="form-control" formControlName="prixTel">
+    </div>
+
+    <div class="form-group">
+      <label>Date création :</label>
+      <input type="date" class="form-control" formControlName="dateCreation" min="2020-01-01" max="2025-12-31">
+    </div>
+
+    <button type="submit" class="btn btn-success" [disabled]="myForm.invalid">Ajouter</button>
+
+  </form>
+</div>

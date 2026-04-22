@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="col-sm-4 col-md-4 col-lg-4 mb-4">
+    <label>Statut</label>
+    <select class="form-control form-control-lg" id="idsat" name="idsat" [(ngModel)]="IdStatus" (change)="onChange()">
+      <option *ngFor="let sat of Status" [value]="sat.idSat">{{ sat.nomSat }}</option>
+    </select>
+  </div>
+
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Statut</th>
+            <th>Prix</th>
+            <th>Date Création</th>
+            <th *ngIf="auth.isAdmin()">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let telephone of telephones; trackBy: trackById">
+            <td>{{ telephone.idtel }}</td>
+            <td>{{ telephone.nomTel }}</td>
+            <td>{{ telephone.desTel }}</td>
+            <td>{{ telephone.statut.nomSat }}</td>
+            <td>{{ telephone.prixTel }} DT</td>
+            <td>{{ telephone.dateCreation | date: 'dd/MM/yyyy' }}</td>
+
+            <td *ngIf="auth.isAdmin()">
+              <button class="btn btn-danger me-2" (click)="supprimerTelephone(telephone)">Supprimer</button>
+              <a class="btn btn-success" [routerLink]="['/updateTelephone', telephone.idtel]">Modifier</a>
+            </td>
+          </tr>
+
+          <tr *ngIf="telephones.length === 0">
+            <td colspan="8" class="text-center text-danger">Aucun téléphone trouvé !</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
