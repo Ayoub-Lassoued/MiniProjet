@@ -8,28 +8,26 @@ import com.ayoub.telephone.entities.Statut;
 import com.ayoub.telephone.repos.StatusRepository;
 
 @CrossOrigin(origins = "*")
-  // يسمح للـ Angular بالتواصل
+
 @RestController
-@RequestMapping("/api/statuts")  // URL نهائي
+@RequestMapping("/api/statuts")
 public class StatutRestController {
 
     @Autowired
     private StatusRepository statutRepository;
 
-    // جلب كل الـ statuts
-    @GetMapping
+    // Ajoutez "/all" ici pour correspondre à Angular
+    @GetMapping("/all")
     public List<Statut> getAllStatut() {
         return statutRepository.findAll();
     }
 
-    // جلب statut بالـ id
-    @GetMapping("/{id}")
+    @GetMapping("/getbyid/{id}")
     public Statut getById(@PathVariable("id") Long id) {
-        return statutRepository.findById(id).orElse(null); // لو مش موجود يرجع null
+        return statutRepository.findById(id).orElse(null);
     }
-    @PostMapping
+    @PostMapping("/addstatut") // Harmonisation avec l'autre controller
     public Statut createStatut(@RequestBody Statut statut) {
         return statutRepository.save(statut);
     }
-
 }

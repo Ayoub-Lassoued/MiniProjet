@@ -23,7 +23,7 @@ public class TelephoneApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // عرض الـ IDs لكل من Telephone و Statut
+        
         repositoryRestConfiguration.exposeIdsFor(Telephone.class, Statut.class);
     }
 }

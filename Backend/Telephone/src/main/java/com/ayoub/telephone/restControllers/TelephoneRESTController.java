@@ -3,58 +3,60 @@ package com.ayoub.telephone.restControllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import com.ayoub.telephone.entities.Telephone;
 import com.ayoub.telephone.service.TelephoneService;
 
-@CrossOrigin // يسمح للـ Angular بالوصول
 @RestController
-@RequestMapping("/api") // رابط أبسط وواضح: http://localhost:8080/api/telephones
+@RequestMapping("/api")
+@CrossOrigin
 public class TelephoneRESTController {
 
     @Autowired
     private TelephoneService telephoneService;
 
-    // جلب كل التليفونات
-    @GetMapping
-    public List<Telephone> getAllTelephone() {
+    // GET ALL
+    @RequestMapping(path = "all", method = RequestMethod.GET)
+    public List<Telephone> getAllTelephones() {
         return telephoneService.getAllTelephone();
     }
 
-    // جلب تليفون بالـ id
-    @GetMapping("/{id}")
+    // GET BY ID
+    @RequestMapping(value = "/getbyid/{id}", method = RequestMethod.GET)
     public Telephone getTelephoneById(@PathVariable("id") Long id) {
         return telephoneService.getTelephone(id);
     }
 
-   
-    @PostMapping
+    // ADD
+    @PostMapping("/addtel")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Telephone createTelephone(@RequestBody Telephone telephone) {
         return telephoneService.saveTelephone(telephone);
     }
 
-    // تعديل تليفون موجود
-    @PutMapping
+    // UPDATE
+    @PutMapping("/updatetel")
     public Telephone updateTelephone(@RequestBody Telephone telephone) {
         return telephoneService.updateTelephone(telephone);
     }
 
-    // حذف تليفون بالـ id
-    @DeleteMapping("/{id}")
+    // DELETE
+    @DeleteMapping("/deltel/{id}")
     public void deleteTelephone(@PathVariable("id") Long id) {
         telephoneService.deleteTelephoneById(id);
     }
 
-    // البحث عن تليفونات بالاسم
+    // SEARCH BY NAME
     @GetMapping("/search/{name}")
-    public List<Telephone> searchTelephones(@PathVariable("name") String name) {
+    public List<Telephone> searchTelephones(@PathVariable String name) {
         return telephoneService.findByNomTel(name);
     }
- // جلب كل التليفونات حسب statut
-    @GetMapping("/telephones/statuts/{idSat}")
-    public List<Telephone> getTelephonesByStatut(@PathVariable Long idSat) {
+
+    // BY STATUT
+    @GetMapping("/telStats/{idSat}")
+    public List<Telephone> getTelephonesByStatut(@PathVariable("idSat") Long idSat) {
         return telephoneService.findByStatutIdSat(idSat);
     }
-
-   
 }
