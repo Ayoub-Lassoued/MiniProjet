@@ -1,4 +1,5 @@
 import { Statut } from "./statut.model";
+import { Image } from "./Image.model";
 
 export class Telephone {
     idtel?: number;
@@ -8,5 +9,10 @@ export class Telephone {
     dateCreation!: Date;
     statut!: Statut;
     emailtel!: String;
+    image!: Image
+    imageStr!: string
+    images!: Image[];
+
+
 
 }

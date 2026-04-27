@@ -18,45 +18,36 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             @if(auth.isAdmin()){
-            <li><a class="dropdown-item" routerLink="/add_telephone">Ajouter</a> </li>
+            <li><a class="dropdown-item" routerLink="/add_telephone">Ajouter</a></li>
             <li><a class="dropdown-item" routerLink="/listS">Gestion des Status</a></li>
-
             }
-
-            <li><a class="dropdown-item" href="">Lister</a></li>
-            <a class="dropdown-item" routerLink="/rechercheparStatut">Recherche par statut</a>
+            <li><a class="dropdown-item" routerLink="/telephoness">Lister</a></li>
+            <li><a class="dropdown-item" routerLink="/rechercheparStatut">Recherche par statut</a></li>
             <li><a class="dropdown-item" routerLink="/rechercheParNom">Recherche Par Nom</a></li>
-
           </ul>
         </li>
       </ul>
-
 
       <ul class="navbar-nav ms-auto m-2">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
-            {{auth.loggedUser}}
-
+            {{ auth.isloggedIn ? auth.loggedUser : 'Compte' }}
           </a>
-
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             @if(!auth.isloggedIn){
             <li><a class="dropdown-item" routerLink="/login">Login</a></li>
+            <li><a class="dropdown-item" routerLink="/register">S'inscrire</a></li>
+            } @else {
+            <li><a class="dropdown-item" routerLink="/profile">Profile</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item text-danger" (click)="onLogout()" style="cursor: pointer;">Logout</a></li>
             }
-            @else {
-            <li><a class="dropdown-item" (click)="onLogout()" href="#">Logout</a></li>
-
-            }
-
-
-
-            <li><a class="dropdown-item" href="#">Profile</a></li>
           </ul>
         </li>
       </ul>
-
-
 
     </div>
   </div>

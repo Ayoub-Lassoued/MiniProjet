@@ -12,16 +12,20 @@ import { Auth } from './services/authservice';
 })
 export class App {
 
+
+
   protected readonly title = signal('telephone');
+
   constructor(public auth: Auth, private router: Router) { }
+
   ngOnInit() {
-    let isloggedin: string;
-    let loggedUser: string;
-    isloggedin = localStorage.getItem('isloggedIn')!;
-    loggedUser = localStorage.getItem('loggedUser')!;
-    if (isloggedin != 'true' || !loggedUser) this.router.navigate(['/login']);
-    else this.auth.setLoggedUserFromLocalStorage(loggedUser);
+    this.auth.loadToken();
+
+    if (!this.auth.token || this.auth.isTokenExpired()) {
+      this.router.navigate(['/login']);
+    }
   }
+
   onLogout() {
     this.auth.logout();
   }

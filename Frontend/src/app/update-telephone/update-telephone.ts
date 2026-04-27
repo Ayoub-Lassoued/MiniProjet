@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Telephone } from '../model/telephone.model';
 import { TelephoneService } from '../services/telephoneservice';
 import { Statut } from '../model/statut.model';
+import { Image } from '../model/Image.model';
 
 @Component({
   selector: 'app-update-telephone',
@@ -15,8 +16,10 @@ import { Statut } from '../model/statut.model';
 })
 export class UpdateTelephone implements OnInit {
   currentTelephone = new Telephone();
-  Status!: Statut[];
+  Status: Statut[] = [];
   myForm!: FormGroup;
+  uploadedImage!: File;
+  imagePath: any; // ✅ pour l'aperçu
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -26,17 +29,18 @@ export class UpdateTelephone implements OnInit {
   ) { }
 
   ngOnInit() {
-    // 1️⃣ تحميل قائمة الحالات
     this.telephoneService.listeStatut().subscribe(cats => {
       this.Status = cats;
     });
 
-    // 2️⃣ تحميل بيانات الهاتف
     this.telephoneService.consulterTelephone(this.activatedRoute.snapshot.params['id'])
       .subscribe(prod => {
         this.currentTelephone = prod;
 
-        // التأكد من وجود التاريخ
+        if (!this.currentTelephone.images) {
+          this.currentTelephone.images = [];
+        }
+
         let formattedDate = '';
         if (this.currentTelephone.dateCreation) {
           const date = new Date(this.currentTelephone.dateCreation);
@@ -45,11 +49,9 @@ export class UpdateTelephone implements OnInit {
           }
         }
 
-        // إنشاء الفورم مع القيم المستلمة
         this.myForm = this.formBuilder.group({
-          idtel: [this.currentTelephone.idtel, Validators.required],
-
-          nomTel: [this.currentTelephone.nomTel, Validators.required],
+          idtel: [this.currentTelephone.idtel],
+          nomTel: [this.currentTelephone.nomTel, [Validators.required, Validators.minLength(6)]],
           desTEL: [this.currentTelephone.desTel, Validators.required],
           prixTel: [this.currentTelephone.prixTel, [Validators.required, Validators.min(0)]],
           dateCreation: [formattedDate, Validators.required],
@@ -64,20 +66,49 @@ export class UpdateTelephone implements OnInit {
 
     const formValues = this.myForm.getRawValue();
 
-    // تحديث بيانات الهاتف
-
     this.currentTelephone.nomTel = formValues.nomTel;
     this.currentTelephone.desTel = formValues.desTEL;
     this.currentTelephone.prixTel = formValues.prixTel;
     this.currentTelephone.dateCreation = formValues.dateCreation;
     this.currentTelephone.emailtel = formValues.emailtel;
-
-    // تحديث الاستات
     this.currentTelephone.statut = { idSat: formValues.statut, nomSat: '' };
 
-    // إرسال التحديث
     this.telephoneService.updateTelephone(this.currentTelephone).subscribe(() => {
       this.router.navigate(['telephoness']);
     });
+  }
+
+  onImageUpload(event: any) {
+    if (event.target.files && event.target.files.length) {
+      this.uploadedImage = event.target.files[0];
+
+      // ✅ Aperçu avant ajout
+      const reader = new FileReader();
+      reader.readAsDataURL(this.uploadedImage);
+      reader.onload = () => {
+        this.imagePath = reader.result;
+      };
+    }
+  }
+
+  onAddImageTelephone() {
+    if (!this.uploadedImage) return;
+    this.telephoneService
+      .uploadImageTel(this.uploadedImage, this.uploadedImage.name, this.currentTelephone.idtel!)
+      .subscribe((img: Image) => {
+        this.currentTelephone.images.push(img);
+        this.imagePath = null; // ✅ effacer l'aperçu après ajout
+      });
+  }
+
+  supprimerImage(img: Image) {
+    let conf = confirm("Etes-vous sûr ?");
+    if (conf)
+      this.telephoneService.supprimerImage(img.idImage).subscribe(() => {
+        const index = this.currentTelephone.images.indexOf(img, 0);
+        if (index > -1) {
+          this.currentTelephone.images.splice(index, 1);
+        }
+      });
   }
 }

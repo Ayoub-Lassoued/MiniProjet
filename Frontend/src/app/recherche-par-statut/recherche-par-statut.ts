@@ -21,14 +21,14 @@ export class RechercheParStatut {
   constructor(private telephoneService: TelephoneService, public auth: Auth) { }
 
   ngOnInit(): void {
-    // Charger tous les statuts
+   
     this.telephoneService.listeStatut().subscribe(cats => {
       this.Status = cats;
       console.log('Statuts:', this.Status);
     });
   }
 
-  // Quand l'utilisateur change le statut
+
   onChange(): void {
     if (!this.IdStatus) return;
 
@@ -38,7 +38,6 @@ export class RechercheParStatut {
     });
   }
 
-  // Supprimer un téléphone
   supprimerTelephone(tel: Telephone): void {
     const conf = confirm("Voulez-vous vraiment supprimer ce téléphone ?");
     if (!conf) return;

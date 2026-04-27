@@ -2,7 +2,7 @@
   <div class="card shadow mb-4">
     <div class="card-body">
 
-      <!-- Composant enfant -->
+
       <app-update-statut [statut]="updatedSatt" (StatuttUpdated)="updatedStatut($event) " [ajout]="ajout">
       </app-update-statut>
 
@@ -23,6 +23,9 @@
             <td>
               <button class="btn btn-success" (click)="updateSat(dep)">Éditer</button>
             </td>
+
+
+
           </tr>
         </tbody>
       </table>

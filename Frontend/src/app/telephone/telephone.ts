@@ -16,37 +16,31 @@ import { Auth } from '../services/authservice';
 export class Telephoness implements OnInit {
   telephones!: Telephone[];
 
-  constructor(private telephoneService: TelephoneService, public auth: Auth) {
+  constructor(private telephoneService: TelephoneService, public auth: Auth) { }
 
-
-
-  }
   ngOnInit(): void {
     this.chargerTelephone();
-    
   }
+
   chargerTelephone() {
     this.telephoneService.listetelephones().subscribe(prods => {
-      console.log(prods);
       this.telephones = prods;
+
+      // ✅ Comme le prof : première image de la liste images[]
+      this.telephones.forEach(tel => {
+        if (tel.images && tel.images.length > 0) {
+          tel.imageStr = 'data:' + tel.images[0].type + ';base64,' + tel.images[0].image;
+        }
+      });
     });
   }
 
-
-
-
   supprimerTelephone(tel: Telephone) {
-    console.log(tel);
     let conf = confirm("Voulez-vous vraiment supprimer ce téléphone ?");
     if (conf) {
       this.telephoneService.supprimerTelephone(tel.idtel!).subscribe(() => {
-        console.log("telephone supprimer");
         this.chargerTelephone();
       });
-
-
     }
   }
 }
-
-

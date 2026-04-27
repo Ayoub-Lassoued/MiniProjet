@@ -2,59 +2,60 @@
   <div class="card shadow mb-4">
     <div class="card-body">
       <table class="table table-striped">
-        <tr>
-
-          <th>Id</th>
-
-          <th>Nom</th>
-          <th>Email</th>
-          <th>Description</th>
-          <th>Statut</th>
-          <th>Prix</th>
-          <th>Date Création</th>
-          <th>Actions</th>
-        </tr>
-
-        @for (telephone of telephones; track telephone.idtel; let index = $index; let nbr = $count; let first = $first;
-        let last = $last) {
-
-        <!-- @if(first) {
-        <h1>Nombre de téléphones : {{ nbr }}</h1>
-        } -->
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Description</th>
+            <th>Image</th>
+            <th>Statut</th>
+            <th>Prix</th>
+            <th>Date Création</th>
+            <th colspan="2">Actions</th>
+          </tr>
+        </thead>
 
         <tbody>
+          @for (telephone of telephones; track telephone.idtel) {
           <tr>
-
             <td>{{ telephone.idtel }}</td>
-
             <td>{{ telephone.nomTel }}</td>
-            <td>{{telephone.emailtel}}</td>
-
+            <td>{{ telephone.emailtel }}</td>
             <td>{{ telephone.desTel }}</td>
+            <td>
+              <!-- ✅ Première image de la liste -->
+              <img *ngIf="telephone.imageStr"
+                src="{{telephone.imageStr}}"
+                class="card-img-top img-responsive"
+                style="height: 50px; width: 100px;">
+              <span *ngIf="!telephone.imageStr" class="text-muted">Aucune</span>
+            </td>
+            <!-- ✅ ?. pour éviter crash si statut null -->
             <td>{{ telephone.statut.nomSat || 'Non défini' }}</td>
-
-
             <td>{{ telephone.prixTel }} DT</td>
             <td>{{ telephone.dateCreation | date:'dd/MM/yyyy' }}</td>
             <td>
               @if(auth.isAdmin()){
-              <a class="btn btn-danger" (click)="supprimerTelephone(telephone)">Supprimer</a>
+              <a class="btn btn-success btn-sm"
+                [routerLink]="['/updateTelephone', telephone.idtel]">Modifier</a>
               }
             </td>
-
             <td>
               @if(auth.isAdmin()){
-              <a class="btn btn-success" [routerLink]="['/updateTelephone', telephone.idtel]">Modifier</a>
+              <a class="btn btn-danger btn-sm"
+                (click)="supprimerTelephone(telephone)">Supprimer</a>
               }
             </td>
-
           </tr>
-        </tbody>
-        }
+          }
 
-        @empty {
-        <h1>Aucun téléphone trouvé !</h1>
-        }
+          @empty {
+          <tr>
+            <td colspan="9" class="text-center text-muted">Aucun téléphone trouvé !</td>
+          </tr>
+          }
+        </tbody>
 
       </table>
     </div>

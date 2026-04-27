@@ -1,67 +1,130 @@
 <div class="container mt-4">
   <h2>Modifier un Téléphone :</h2>
 
-  <!-- الفورم يظهر فقط بعد إنشاء FormGroup -->
   <form *ngIf="myForm" [formGroup]="myForm" (ngSubmit)="updateTelephone()">
 
-
-
-
-
+    <!-- Nom -->
     <div class="mb-3">
       <label>Nom Téléphone</label>
-      <input type="text" class="form-control" formControlName="nomTel">
-      <div *ngIf="myForm.get('nomTel')?.invalid && myForm.get('nomTel')?.touched" class="text-danger">
-        ⚠️ Le nom est obligatoire.
+      <input type="text" class="form-control" formControlName="nomTel"
+        [ngClass]="{'is-invalid': myForm.get('nomTel')?.invalid && myForm.get('nomTel')?.touched}">
+      <div class="invalid-feedback">
+        <span *ngIf="myForm.get('nomTel')?.errors?.['required']">⚠️ Le nom est obligatoire.</span>
+        <span *ngIf="myForm.get('nomTel')?.errors?.['minlength']">⚠️ Minimum 6 caractères.</span>
       </div>
     </div>
 
+    <!-- Email -->
     <div class="mb-3">
       <label>Email Téléphone</label>
-      <input type="email" class="form-control" formControlName="emailtel">
-      <div *ngIf="myForm.get('emailtel')?.errors?.['required'] && myForm.get('emailtel')?.touched" class="text-danger">
-        ⚠️ L'email est obligatoire.
-      </div>
-      <div *ngIf="myForm.get('emailtel')?.errors?.['email'] && myForm.get('emailtel')?.touched" class="text-danger">
-        ⚠️ Format d'email invalide.
+      <input type="email" class="form-control" formControlName="emailtel"
+        [ngClass]="{'is-invalid': myForm.get('emailtel')?.invalid && myForm.get('emailtel')?.touched}">
+      <div class="invalid-feedback">
+        <span *ngIf="myForm.get('emailtel')?.errors?.['required']">⚠️ L'email est obligatoire.</span>
+        <span *ngIf="myForm.get('emailtel')?.errors?.['email']">⚠️ Format d'email invalide.</span>
       </div>
     </div>
 
+    <!-- Description -->
     <div class="mb-3">
       <label>Description</label>
-      <textarea class="form-control" formControlName="desTEL"></textarea>
-      <div *ngIf="myForm.get('desTEL')?.invalid && myForm.get('desTEL')?.touched" class="text-danger">
-        ⚠️ La description est obligatoire.
+      <textarea class="form-control" formControlName="desTEL"
+        [ngClass]="{'is-invalid': myForm.get('desTEL')?.invalid && myForm.get('desTEL')?.touched}">
+      </textarea>
+      <div class="invalid-feedback">
+        <span *ngIf="myForm.get('desTEL')?.errors?.['required']">⚠️ La description est obligatoire.</span>
       </div>
     </div>
 
+    <!-- ✅ Upload image après description -->
+    <div class="mb-3">
+      <label>Image :</label>
+      <input type="file" (change)="onImageUpload($event)" class="form-control" accept="image/*">
+    </div>
+
+    <!-- ✅ Aperçu de l'image avant ajout -->
+    <div class="mb-3" *ngIf="imagePath">
+      <label>Aperçu :</label><br>
+      <img [src]="imagePath" class="img-thumbnail" style="height: 200px; width: 300px; object-fit: cover;">
+    </div>
+
+    <!-- ✅ Bouton ajouter image -->
+    <div class="mb-3">
+      <button type="button" class="btn btn-success" (click)="onAddImageTelephone()">
+        Ajouter Image
+      </button>
+    </div>
+
+    <!-- Statut -->
     <div class="mb-3">
       <label>Statut</label>
-      <select class="form-control" formControlName="statut">
+      <select class="form-control" formControlName="statut"
+        [ngClass]="{'is-invalid': myForm.get('statut')?.invalid && myForm.get('statut')?.touched}">
+        <option value="">-- Sélectionner --</option>
         <option *ngFor="let s of Status" [value]="s.idSat">{{ s.nomSat }}</option>
       </select>
-      <div *ngIf="myForm.get('statut')?.invalid && myForm.get('statut')?.touched" class="text-danger">
-        ⚠️ Veuillez sélectionner un statut.
+      <div class="invalid-feedback">
+        <span *ngIf="myForm.get('statut')?.errors?.['required']">⚠️ Veuillez sélectionner un statut.</span>
       </div>
     </div>
 
+    <!-- Prix -->
     <div class="mb-3">
       <label>Prix Téléphone</label>
-      <input type="number" class="form-control" formControlName="prixTel">
-      <div *ngIf="myForm.get('prixTel')?.invalid && myForm.get('prixTel')?.touched" class="text-danger">
-        ⚠️ Le prix est obligatoire et doit être ≥ 0.
+      <input type="number" class="form-control" formControlName="prixTel"
+        [ngClass]="{'is-invalid': myForm.get('prixTel')?.invalid && myForm.get('prixTel')?.touched}">
+      <div class="invalid-feedback">
+        <span *ngIf="myForm.get('prixTel')?.errors?.['required']">⚠️ Le prix est obligatoire.</span>
+        <span *ngIf="myForm.get('prixTel')?.errors?.['min']">⚠️ Le prix doit être ≥ 0.</span>
       </div>
     </div>
 
+    <!-- Date -->
     <div class="mb-3">
       <label>Date création</label>
-      <input type="date" class="form-control" formControlName="dateCreation">
-      <div *ngIf="myForm.get('dateCreation')?.invalid && myForm.get('dateCreation')?.touched" class="text-danger">
-        ⚠️ La date est obligatoire.
+      <input type="date" class="form-control" formControlName="dateCreation"
+        [ngClass]="{'is-invalid': myForm.get('dateCreation')?.invalid && myForm.get('dateCreation')?.touched}">
+      <div class="invalid-feedback">
+        <span *ngIf="myForm.get('dateCreation')?.errors?.['required']">⚠️ La date est obligatoire.</span>
       </div>
     </div>
 
     <button type="submit" class="btn btn-success" [disabled]="myForm.invalid">Modifier</button>
 
   </form>
+
+  <!-- ✅ Tableau des images -->
+  <div class="card shadow mb-4 mt-3">
+    <div class="card-body">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Images</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        @for(img of currentTelephone.images; track img.idImage) {
+        <tbody>
+          <tr>
+            <td>
+              <img class="card-img-top img-responsive" src="{{'data:' + img.type + ';base64,' + img.image}}"
+                style="height: 50px; width: 100px;">
+            </td>
+            <td style="width:20%">
+              <a class="btn btn-danger" (click)="supprimerImage(img)">Supprimer</a>
+            </td>
+          </tr>
+        </tbody>
+        }
+        @empty {
+        <tbody>
+          <tr>
+            <td colspan="2" class="text-center text-muted">Aucune image.</td>
+          </tr>
+        </tbody>
+        }
+      </table>
+    </div>
+  </div>
+
 </div>
