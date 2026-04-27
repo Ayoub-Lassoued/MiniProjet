@@ -27,15 +27,15 @@ public class UserMicroserviceApplication {
 		userService.addRole(new Role(null,"ADMIN"));
 		userService.addRole(new Role(null,"USER"));
 		//ajouter les users
-		userService.saveUser(new User(null,"admin","123",true,null, null));
-		userService.saveUser(new User(null,"med","123",true,null, null));
-		userService.saveUser(new User(null,"yassine","123",true,null, null));
+		userService.saveUser(new User(null,"admin","123",true,null));
+		userService.saveUser(new User(null,"med","123",true,null));
+		userService.saveUser(new User(null,"yassine","123",true,null));
 		//ajouter les rôles aux users
 		userService.addRoleToUser("admin", "ADMIN");
 		userService.addRoleToUser("admin", "USER");
 		userService.addRoleToUser("med", "USER");
 		userService.addRoleToUser("yassine", "USER");
-	}
+	}*/
 	
-*/
+
 }
