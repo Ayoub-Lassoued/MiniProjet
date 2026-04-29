@@ -1,42 +1,51 @@
 <div class="container mt-4">
   <h2>Ajouter un Nouveau Téléphone :</h2>
 
-  <form [formGroup]="myForm" (ngSubmit)="addTelephone()">
+  <form #myForm="ngForm" (ngSubmit)="addTelephone(myForm)">
 
-    <!-- Nom -->
+  
     <div class="form-group">
       <label>Nom Téléphone :</label>
-      <input type="text" class="form-control" formControlName="nomTel"
-        [ngClass]="{'is-invalid': myForm.get('nomTel')?.invalid && myForm.get('nomTel')?.touched}">
+      <input type="text" class="form-control"
+        name="nomTel" [(ngModel)]="newTelephone.nomTel"
+        required minlength="6"
+        #nomTel="ngModel"
+        [ngClass]="{'is-invalid': nomTel.invalid && nomTel.touched}">
       <div class="invalid-feedback">
-        <span *ngIf="myForm.get('nomTel')?.errors?.['required']">⚠️ Le nom est obligatoire.</span>
-        <span *ngIf="myForm.get('nomTel')?.errors?.['minlength']">⚠️ Minimum 6 caractères.</span>
+        <span *ngIf="nomTel.errors?.['required']">⚠️ Le nom est obligatoire.</span>
+        <span *ngIf="nomTel.errors?.['minlength']">⚠️ Minimum 6 caractères.</span>
       </div>
     </div>
 
-    <!-- Email -->
+  
     <div class="form-group">
       <label>Email Téléphone :</label>
-      <input type="email" class="form-control" formControlName="emailtel"
-        [ngClass]="{'is-invalid': myForm.get('emailtel')?.invalid && myForm.get('emailtel')?.touched}">
+      <input type="email" class="form-control"
+        name="emailtel" [(ngModel)]="newTelephone.emailtel"
+        required email
+        #emailtel="ngModel"
+        [ngClass]="{'is-invalid': emailtel.invalid && emailtel.touched}">
       <div class="invalid-feedback">
-        <span *ngIf="myForm.get('emailtel')?.errors?.['required']">⚠️ L'email est obligatoire.</span>
-        <span *ngIf="myForm.get('emailtel')?.errors?.['email']">⚠️ Format d'email invalide.</span>
+        <span *ngIf="emailtel.errors?.['required']">⚠️ L'email est obligatoire.</span>
+        <span *ngIf="emailtel.errors?.['email']">⚠️ Format d'email invalide.</span>
       </div>
     </div>
 
-    <!-- Description -->
+
     <div class="form-group">
       <label>Description :</label>
-      <textarea class="form-control" formControlName="desTEL"
-        [ngClass]="{'is-invalid': myForm.get('desTEL')?.invalid && myForm.get('desTEL')?.touched}">
+      <textarea class="form-control"
+        name="desTel" [(ngModel)]="newTelephone.desTel"
+        required
+        #desTel="ngModel"
+        [ngClass]="{'is-invalid': desTel.invalid && desTel.touched}">
       </textarea>
       <div class="invalid-feedback">
-        <span *ngIf="myForm.get('desTEL')?.errors?.['required']">⚠️ La description est obligatoire.</span>
+        <span *ngIf="desTel.errors?.['required']">⚠️ La description est obligatoire.</span>
       </div>
     </div>
 
-    <!-- Image -->
+
     <div class="form-group">
       <label>Image :</label>
       <input type="file" (change)="onImageUpload($event)" name="logo" class="form-control" accept="image/*">
@@ -45,37 +54,46 @@
       <img [src]="imagePath" class="img-fluid img-thumbnail mt-2" style="width: 500px; height: 300px;">
     </div>
 
-    <!-- Statut -->
+  
     <div class="form-group">
       <label>Statut :</label>
-      <select class="form-control" formControlName="statut"
-        [ngClass]="{'is-invalid': myForm.get('statut')?.invalid && myForm.get('statut')?.touched}">
-        <option value="">-- Sélectionner --</option>
-        <option *ngFor="let s of Statuts" [value]="s.idSat">{{ s.nomSat }}</option>
+      <select class="form-control"
+        name="statut" [(ngModel)]="newTelephone.statut"
+        required
+        #statut="ngModel"
+        [ngClass]="{'is-invalid': statut.invalid && statut.touched}">
+        <option [ngValue]="null">-- Sélectionner --</option>
+        <option *ngFor="let s of Statuts" [ngValue]="s">{{ s.nomSat }}</option>
       </select>
       <div class="invalid-feedback">
-        <span *ngIf="myForm.get('statut')?.errors?.['required']">⚠️ Le statut est obligatoire.</span>
+        <span *ngIf="statut.errors?.['required']">⚠️ Le statut est obligatoire.</span>
       </div>
     </div>
 
-    <!-- Prix -->
+
     <div class="form-group">
       <label>Prix Téléphone :</label>
-      <input type="number" class="form-control" formControlName="prixTel"
-        [ngClass]="{'is-invalid': myForm.get('prixTel')?.invalid && myForm.get('prixTel')?.touched}">
+      <input type="number" class="form-control"
+        name="prixTel" [(ngModel)]="newTelephone.prixTel"
+        required min="0"
+        #prixTel="ngModel"
+        [ngClass]="{'is-invalid': prixTel.invalid && prixTel.touched}">
       <div class="invalid-feedback">
-        <span *ngIf="myForm.get('prixTel')?.errors?.['required']">⚠️ Le prix est obligatoire.</span>
-        <span *ngIf="myForm.get('prixTel')?.errors?.['min']">⚠️ Le prix doit être positif.</span>
+        <span *ngIf="prixTel.errors?.['required']">⚠️ Le prix est obligatoire.</span>
+        <span *ngIf="prixTel.errors?.['min']">⚠️ Le prix doit être positif.</span>
       </div>
     </div>
 
-    <!-- Date -->
+
     <div class="form-group">
       <label>Date création :</label>
-      <input type="date" class="form-control" formControlName="dateCreation" min="2020-01-01" max="2025-12-31"
-        [ngClass]="{'is-invalid': myForm.get('dateCreation')?.invalid && myForm.get('dateCreation')?.touched}">
+      <input type="date" class="form-control"
+        name="dateCreation" [(ngModel)]="newTelephone.dateCreation"
+        required min="2020-01-01" max="2026-12-31"
+        #dateCreation="ngModel"
+        [ngClass]="{'is-invalid': dateCreation.invalid && dateCreation.touched}">
       <div class="invalid-feedback">
-        <span *ngIf="myForm.get('dateCreation')?.errors?.['required']">⚠️ La date est obligatoire.</span>
+        <span *ngIf="dateCreation.errors?.['required']">⚠️ La date est obligatoire.</span>
       </div>
     </div>
 
